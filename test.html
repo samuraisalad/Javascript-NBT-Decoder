@@ -3,12 +3,20 @@
 		<script type="text/javascript" src="NBT.js"></script>
 		<script type="text/javascript">
 			function loadNBTFile(fileSelect) {
+
 				var file = fileSelect.files[0];
-				var nbtfile = file.getAsBinary();
-				var nbt = new NBT(nbtfile);
-				
-				var resultDiv = document.getElementById("result");
-				resultDiv.innerHTML = nbt.root[0].toSource();
+				// getAsBinary is not supported on Chrome.
+				// var nbtfile = file.getAsBinary();
+				var r = new FileReader();
+				r.onload = function(){ 
+					var nbtfile = r.result;
+					var nbt = new NBT(nbtfile);
+					var resultDiv = document.getElementById("result");
+					// toSource is not supported on Chrome.
+					// resultDiv.innerHTML = nbt.root[0].toSource();
+					resultDiv.innerHTML = JSON.stringify(nbt.root[0]);
+				};
+				r.readAsBinaryString(file);
 			}
 		</script>
 	</head>
